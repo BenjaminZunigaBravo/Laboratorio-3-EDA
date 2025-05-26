@@ -139,9 +139,9 @@ public static class Dataset{
         fin = data.size() - 1;
 
         while(inicio <= fin){
-            mitad = (inicio + fin) / 2;
+            mitad = inicio + (fin - inicio) / 2;
             if(data.get(mitad).getPrice() == price){
-                fin = mitad - 1;
+                fin = mitad ;
             } else if(data.get(mitad).getPrice() < price){
                 inicio = mitad + 1;
             } else {
@@ -169,10 +169,10 @@ public static class Dataset{
         precioInicial = -1;
 
         while(inicio <= fin){
-            mitad = (inicio + fin) / 2;
+            mitad = inicio + (fin - inicio) / 2;
             if(data.get(mitad).getPrice() >= lowerPrice){
                 precioInicial = mitad;
-                fin = mitad - 1;
+                fin = mitad;
             } else {
                 inicio = mitad + 1;
             }
@@ -183,7 +183,7 @@ public static class Dataset{
         precioFinal = -1;
 
         while(inicio <= fin){
-            mitad = (inicio + fin) / 2;
+            mitad = inicio + (fin - inicio) / 2;
             if(data.get(mitad).getPrice() <= higherPrice){
                 precioFinal = mitad;
                 inicio = mitad + 1;
@@ -207,7 +207,7 @@ public static class Dataset{
         fin = data.size() - 1;
 
         while(inicio <= fin){
-            mitad = (inicio + fin) / 2;
+            mitad = inicio + (fin - inicio) / 2;
             if(data.get(mitad).getCategory().equals(category)){
                 fin = mitad - 1;
             } else if(data.get(mitad).getCategory().compareTo(category) < 0){
@@ -236,7 +236,7 @@ public static class Dataset{
         fin = data.size() - 1;
 
         while(inicio <= fin){
-            mitad = (inicio + fin) / 2;
+            mitad = inicio + (fin - inicio) / 2;
             if(data.get(mitad).getQuality() == quality){
                 fin = mitad - 1;
             } else if(data.get(mitad).getQuality() < quality){
@@ -453,7 +453,7 @@ public static class GenerateData{
     }
 }
     public static void main(String[] args) {
-        // Generar datos de prueba
+        long inicio = System.currentTimeMillis();
         GenerateData generador = new GenerateData();
         ArrayList<Game> juegos = generador.generarJuegos(20);
         Dataset dataset = new Dataset(juegos);
@@ -461,7 +461,6 @@ public static class GenerateData{
         System.out.println("=== JUEGOS SIN ORDENAR ===");
         imprimirJuegos(dataset.getData());
 
-        // Prueba de ordenamientos
         System.out.println("\n=== ORDENADO POR PRECIO (QUICKSORT) ===");
         dataset.sortByAlgorithm("quickSort", "price");
         imprimirJuegos(dataset.getData());
@@ -474,18 +473,20 @@ public static class GenerateData{
         dataset.sortByAlgorithm("countingSort", "quality");
         imprimirJuegos(dataset.getData());
 
-        // Prueba de búsquedas
-        System.out.println("\n=== BUSQUEDA POR PRECIO (50) ===");
-        imprimirJuegos(dataset.getGamesByPrice(50));
+        // busquedas
+        System.out.println("\n=== BUSQUEDA POR PRECIO (10000) ===");
+        imprimirJuegos(dataset.getGamesByPrice(10000));
 
-        System.out.println("\n=== BUSQUEDA POR RANGO DE PRECIO (30-70) ===");
-        imprimirJuegos(dataset.getGamesByPriceRange(30, 70));
+        System.out.println("\n=== BUSQUEDA POR RANGO DE PRECIO (5000-15000) ===");
+        imprimirJuegos(dataset.getGamesByPriceRange(5000, 15000));
 
         System.out.println("\n=== BUSQUEDA POR CATEGORÍA (Aventura) ===");
-        imprimirJuegos(dataset.getGamesByCategory("Aventura"));
+        imprimirJuegos(dataset.getGamesByCategory("Estrategia"));
 
         System.out.println("\n=== BUSQUEDA POR CALIDAD (80) ===");
         imprimirJuegos(dataset.getGamesByQuality(80));
+        long fin = System.currentTimeMillis();
+        System.out.println("Tiempo de ejecución: " + (fin - inicio) + " milisegundos");
     }
 
     // Método auxiliar para imprimir la lista de juegos
